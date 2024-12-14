@@ -37,82 +37,80 @@ const TaskForm = ({ task, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-200 mb-1">
           Title
         </label>
         <input
           type="text"
           name="title"
-          id="title"
           required
           value={formData.title}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="form-input-gradient w-full rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-200"
+          placeholder="Enter task title"
         />
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-gray-200 mb-1">
           Description
         </label>
         <textarea
           name="description"
-          id="description"
           rows={3}
           value={formData.description}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          className="form-input-gradient w-full rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-200"
+          placeholder="Enter task description"
         />
       </div>
 
-      <div>
-        <label htmlFor="priority" className="block text-sm font-medium text-gray-700">
-          Priority
-        </label>
-        <select
-          name="priority"
-          id="priority"
-          value={formData.priority}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-200 mb-1">
+            Priority
+          </label>
+          <select
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+            className="form-input-gradient w-full rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-200 [&>option]:text-gray-900 [&>option]:bg-white"
+          >
+            <option value="low" className="bg-white text-gray-900">Low</option>
+            <option value="medium" className="bg-white text-gray-900">Medium</option>
+            <option value="high" className="bg-white text-gray-900">High</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-200 mb-1">
+            Due Date
+          </label>
+          <input
+            type="date"
+            name="dueDate"
+            required
+            value={formData.dueDate}
+            onChange={handleChange}
+            className="form-input-gradient w-full rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-200"
+          />
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">
-          Due Date
-        </label>
-        <input
-          type="date"
-          name="dueDate"
-          id="dueDate"
-          required
-          value={formData.dueDate}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-        />
-      </div>
-
-      <div className="flex justify-end space-x-3 pt-4">
+      <div className="flex justify-end space-x-4 pt-6">
         <button
           type="button"
           onClick={onClose}
-          className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          className="px-6 py-2.5 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-700 transition-all duration-200"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className={`inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm 
-            ${loading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'} 
-            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+          className="button-gradient px-6 py-2.5 rounded-lg text-white font-medium shadow-lg disabled:opacity-50"
         >
           {loading ? 'Saving...' : task ? 'Update Task' : 'Create Task'}
         </button>
