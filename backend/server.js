@@ -42,6 +42,21 @@ routeFiles.forEach((file) => {
     });
 });
 
+// Add this before your route handling
+app.get('/api/v1/test', (req, res) => {
+  res.json({ message: 'Backend is working!' });
+});
+
+// Add error handling for 404
+app.use((req, res) => {
+  console.log(`404 - Not Found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({
+    message: 'Endpoint not found',
+    requestedUrl: req.originalUrl,
+    method: req.method
+  });
+});
+
 const server = async () => {
   try {
     await connect();
