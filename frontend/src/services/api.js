@@ -1,17 +1,17 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: 'https://task-management-mern-frontend.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
   withCredentials: true
 });
 
-// Add request interceptor for debugging
+// Add request logging
 api.interceptors.request.use(
   (config) => {
-    console.log('Request:', config.method.toUpperCase(), config.url);
+    console.log('Making request to:', config.method.toUpperCase(), config.url);
     return config;
   },
   (error) => {
@@ -19,7 +19,7 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for debugging
+// Add response logging
 api.interceptors.response.use(
   (response) => {
     console.log('Response:', response.status, response.data);
