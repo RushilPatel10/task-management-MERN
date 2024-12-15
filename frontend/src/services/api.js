@@ -1,11 +1,16 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://task-management-mern-backend.onrender.com',
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? 'https://task-management-mern-backend.onrender.com/api/v1'
+    : '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true
 })
+
+
 
 // Add request interceptor to include auth token
 api.interceptors.request.use(

@@ -15,8 +15,10 @@ const app = express();
 // middleware
 app.use(
   cors({
-    origin: 'https://task-management-mern-frontend.onrender.com',
+    origin: ['https://task-management-mern-frontend.onrender.com', 'http://localhost:3000'],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 app.use(express.json());

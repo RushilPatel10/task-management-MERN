@@ -12,17 +12,21 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const register = async (userData) => {
-    const response = await api.post('/auth/register', {
-      name: userData.name,
-      email: userData.email,
-      password: userData.password
-    });
-    
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user);
+    try {
+      const response = await api.post('/register', {
+        name: userData.name,
+        email: userData.email,
+        password: userData.password
+      });
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        setUser(response.data.user);
+      }
+      return response.data;
+    } catch (error) {
+      throw error;
     }
-    return response.data;
   };
 
   const login = async (credentials) => {
