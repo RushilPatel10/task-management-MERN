@@ -15,7 +15,7 @@ const app = express();
 // middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: 'https://task-management-mern-frontend.onrender.com',
     credentials: true,
   })
 );
