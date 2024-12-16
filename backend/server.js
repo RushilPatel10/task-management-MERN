@@ -5,11 +5,15 @@ import connect from "./src/db/connect.js";
 import cookieParser from "cookie-parser";
 import fs from "node:fs";
 import errorHandler from "./src/helpers/errorhandler.js";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
 const port = process.env.PORT || 8000;
-
 const app = express();
 
 // middleware
@@ -28,26 +32,28 @@ app.use(cookieParser());
 // error handler middleware
 app.use(errorHandler);
 
-//routes
-const routeFiles = fs.readdirSync("./src/routes");
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
-routeFiles.forEach((file) => {
-  // use dynamic import
-  import(`./src/routes/${file}`)
-    .then((route) => {
+// Load routes
+const routesPath = join(__dirname, 'src', 'routes');
+try {
+  const routeFiles = fs.readdirSync(routesPath);
+  
+  for (const file of routeFiles) {
+    if (file.endsWith('.js')) {
+      const route = await import(`./src/routes/${file}`);
       app.use("/api/v1", route.default);
-    })
-    .catch((err) => {
-      console.log("Failed to load route file", err);
-    });
-});
+      console.log(`Loaded route: ${file}`);
+    }
+  }
+} catch (error) {
+  console.error('Error loading routes:', error);
+}
 
-// Add this before your route handling
-app.get('/api/v1/test', (req, res) => {
-  res.json({ message: 'Backend is working!' });
-});
-
-// Add error handling for 404
+// 404 handler
 app.use((req, res) => {
   console.log(`404 - Not Found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
@@ -60,12 +66,11 @@ app.use((req, res) => {
 const server = async () => {
   try {
     await connect();
-
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
-    console.log("Failed to strt server.....", error.message);
+    console.log("Failed to start server.....", error.message);
     process.exit(1);
   }
 };
