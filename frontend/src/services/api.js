@@ -15,9 +15,16 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    console.log('API Request:', {
+      method: config.method,
+      url: config.url,
+      data: config.data,
+      headers: config.headers
+    });
     return config;
   },
   (error) => {
+    console.error('API Request Error:', error);
     return Promise.reject(error);
   }
 );
@@ -25,15 +32,17 @@ api.interceptors.request.use(
 // Add response logging
 api.interceptors.response.use(
   (response) => {
-    console.log('Response:', response.status, response.data);
+    console.log('API Response:', {
+      status: response.status,
+      data: response.data
+    });
     return response;
   },
   (error) => {
-    console.error('API Error:', {
-      url: error.config?.url,
-      method: error.config?.method,
+    console.error('API Response Error:', {
       status: error.response?.status,
-      data: error.response?.data
+      data: error.response?.data,
+      message: error.message
     });
     return Promise.reject(error);
   }

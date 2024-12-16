@@ -10,10 +10,13 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/task/create", protect, createTask);
-router.get("/tasks", protect, getTasks);
-router.get("/task/:id", protect, getTask);
-router.patch("/task/:id", protect, updateTask);
-router.delete("/task/:id", protect, deleteTask);
+// All routes are protected
+router.use(protect);
+
+router.get("/task/all", getTasks);
+router.post("/task/create", createTask);
+router.get("/task/:id", getTask);
+router.patch("/task/:id", updateTask);
+router.delete("/task/:id", deleteTask);
 
 export default router;
