@@ -1,17 +1,20 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://task-management-mern-frontend.onrender.com/api/v1',
+  baseURL: 'https://task-management-mern-backend.onrender.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
   withCredentials: true
 });
 
-// Add request logging
+// Request interceptor
 api.interceptors.request.use(
   (config) => {
-    console.log('Making request to:', config.method.toUpperCase(), config.url);
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {

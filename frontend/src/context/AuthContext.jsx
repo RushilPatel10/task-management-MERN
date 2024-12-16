@@ -13,35 +13,42 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await api.post('/auth/register', {
-        name: userData.name,
-        email: userData.email,
-        password: userData.password
-      });
+      const response = await api.post('/auth/register', userData);
       
-      if (response.data.token) {
+      if (response.data) {
         localStorage.setItem('token', response.data.token);
-        setUser(response.data.user);
+        setUser({
+          id: response.data._id,
+          name: response.data.name,
+          email: response.data.email,
+          role: response.data.role
+        });
+        return response.data;
       }
-      return response.data;
     } catch (error) {
-      console.error('Registration error details:', {
-        url: error.config?.url,
-        method: error.config?.method,
-        status: error.response?.status,
-        data: error.response?.data
-      });
+      console.error('Registration error:', error);
       throw error;
     }
   };
 
   const login = async (credentials) => {
-    const response = await api.post('/auth/login', credentials);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user);
+    try {
+      const response = await api.post('/auth/login', credentials);
+      
+      if (response.data) {
+        localStorage.setItem('token', response.data.token);
+        setUser({
+          id: response.data._id,
+          name: response.data.name,
+          email: response.data.email,
+          role: response.data.role
+        });
+        return response.data;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
-    return response.data;
   };
 
   const logout = () => {
